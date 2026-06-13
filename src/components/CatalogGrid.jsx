@@ -3,12 +3,12 @@ import { catalogos } from '../data/catalogos'
 
 export default function CatalogGrid({ onOpenCatalog }) {
   return (
-    <div className="h-full flex flex-col p-6 lg:p-8 overflow-y-auto">
-      <header className="mb-8">
-        <h1 className="text-3xl lg:text-4xl font-bold text-on-surface mb-2">
+    <div className="h-full flex flex-col p-4 lg:p-6 overflow-y-auto">
+      <header className="mb-5">
+        <h1 className="text-xl lg:text-2xl font-bold text-on-surface mb-1">
           Catálogos
         </h1>
-        <p className="text-on-surface-variant text-sm">
+        <p className="text-on-surface-variant text-xs">
           Selecciona un catálogo para visualizarlo
         </p>
       </header>
@@ -26,7 +26,7 @@ export default function CatalogGrid({ onOpenCatalog }) {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
           {catalogos.map((cat) => (
             <CatalogCard key={cat.id} catalog={cat} onOpen={onOpenCatalog} />
           ))}
