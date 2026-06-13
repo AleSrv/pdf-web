@@ -17,7 +17,7 @@ export default function App() {
     setCatalogTitle(catalog.title)
     setView('viewer')
     try {
-      const url = `https://docs.google.com/uc?export=download&confirm=t&id=${catalog.fileId}`
+      const url = catalog.url || `https://docs.google.com/uc?export=download&confirm=t&id=${catalog.fileId}`
       const res = await fetch(url)
       if (!res.ok) throw new Error('Error al descargar el archivo')
       const arrayBuffer = await res.arrayBuffer()
