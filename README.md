@@ -7,14 +7,13 @@ Construido con React 19, Vite 6, Tailwind CSS v4 y pdfjs-dist.
 
 ## Características
 
-- **Subir PDF** — Arrastra y suelta o selecciona tu archivo PDF
+- **Grid de catálogos** — Pantalla principal con tarjetas de cada catálogo disponible
+- **Carga desde Google Drive** — Los PDFs se descargan desde Drive (archivos públicos)
 - **Navegación por arrastre** — Deslizar con mouse o dedo (táctil)
 - **Navegación por teclado** — ← →, Home, End
 - **Tap en bordes** — Toca el 30% izquierdo/derecho para avanzar/retroceder
-- **URLs con hash** — `#page/1`, `#page/2` — compatible con back/forward
 - **Miniaturas** — Strip inferior con scroll automático a la página activa
 - **Pantalla completa** — Botón para expandir
-- **Persistencia local** — El PDF renderizado se guarda en localStorage
 - **Tema oscuro** — Diseño Stitch con acentos periwinkle (#c0c1ff)
 - **Responsive** — Funciona en móvil y desktop
 
@@ -27,7 +26,23 @@ npm run dev
 
 Abrir en `http://localhost:5173`
 
-Arrastra un PDF al área de carga y navega por las páginas.
+Selecciona un catálogo del grid para visualizarlo.
+
+## Agregar un catálogo
+
+1. Sube el PDF a Google Drive como archivo público
+2. Copia el **fileId** de la URL (ej: `1ABCxyz...`)
+3. Edita `src/data/catalogos.js`:
+
+```js
+{
+  id: 'mi-catalogo',
+  title: 'Mi Catálogo',
+  subtitle: 'Descripción opcional',
+  fileId: '1ABCxyz...',
+  pages: 24,
+}
+```
 
 ## Build producción
 

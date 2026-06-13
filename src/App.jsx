@@ -1,56 +1,52 @@
-import { useState, useEffect } from 'react'
-import PdfUploader from './components/PdfUploader'
+import { useState, useCallback } from 'react'
+import CatalogGrid from './components/CatalogGrid'
 import CatalogViewer from './components/CatalogViewer'
 import { renderPdfPages } from './lib/pdfRenderer'
 
-const STORAGE_KEY = 'catalogo-pdf-data'
-const MAX_STORAGE = 4.5 * 1024 * 1024
-
 export default function App() {
+  const [view, setView] = useState('grid')
   const [pages, setPages] = useState(null)
   const [totalPages, setTotalPages] = useState(0)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [catalogTitle, setCatalogTitle] = useState('')
 
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved) {
-      try {
-        const { totalPages: t, pages: p } = JSON.parse(saved)
-        if (Array.isArray(p) && p.length > 0) {
-          setTotalPages(t)
-          setPages(p)
-        }
-      } catch {}
-    }
-  }, [])
-
-  const handlePdfLoad = async (arrayBuffer) => {
+  const handleOpenCatalog = useCallback(async (catalog) => {
     setLoading(true)
     setError(null)
+    setCatalogTitle(catalog.title)
+    setView('viewer')
     try {
+      const url = `https://docs.google.com/uc?export=download&confirm=t&id=${catalog.fileId}`
+      const res = await fetch(url)
+      if (!res.ok) throw new Error('Error al descargar el archivo')
+      const arrayBuffer = await res.arrayBuffer()
       const result = await renderPdfPages(arrayBuffer)
       setTotalPages(result.totalPages)
       setPages(result.pages)
-      try {
-        const serialized = JSON.stringify(result)
-        if (serialized.length < MAX_STORAGE) {
-          localStorage.setItem(STORAGE_KEY, serialized)
-        }
-      } catch {}
     } catch (err) {
-      setError('Error al cargar el PDF. Verifica que el archivo sea válido.')
+      setError(
+        err.message === 'Failed to fetch'
+          ? 'No se pudo descargar el catálogo. Verifica que el archivo sea público en Google Drive.'
+          : err.message || 'Error al cargar el catálogo'
+      )
+      setPages(null)
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
+    setView('grid')
     setPages(null)
     setTotalPages(0)
     setError(null)
-    localStorage.removeItem(STORAGE_KEY)
+    setCatalogTitle('')
     window.location.hash = ''
+  }, [])
+
+  if (view === 'grid') {
+    return <CatalogGrid onOpenCatalog={handleOpenCatalog} />
   }
 
   if (loading) {
@@ -58,7 +54,9 @@ export default function App() {
       <div className="flex items-center justify-center h-full">
         <div className="text-center flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-          <p className="text-on-surface-variant text-sm">Procesando PDF...</p>
+          <p className="text-on-surface-variant text-sm">
+            {catalogTitle ? `Cargando ${catalogTitle}...` : 'Cargando...'}
+          </p>
         </div>
       </div>
     )
@@ -71,24 +69,23 @@ export default function App() {
           <span className="material-symbols-outlined text-5xl text-tertiary">error_outline</span>
           <p className="text-on-surface-variant text-sm max-w-md">{error}</p>
           <button
-            onClick={() => setError(null)}
+            onClick={handleBack}
             className="px-4 py-2 rounded-lg bg-primary text-on-primary text-sm font-medium hover:opacity-90 transition-opacity"
           >
-            Intentar de nuevo
+            Volver a catálogos
           </button>
         </div>
       </div>
     )
   }
 
-  if (!pages) {
-    return <PdfUploader onPdfLoad={handlePdfLoad} />
-  }
+  if (!pages) return null
 
   return (
     <CatalogViewer
       pages={pages}
       totalPages={totalPages}
+      title={catalogTitle}
       onBack={handleBack}
     />
   )

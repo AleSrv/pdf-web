@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import PageControls from './PageControls'
 import ThumbnailStrip from './ThumbnailStrip'
 
-export default function CatalogViewer({ pages, totalPages, onBack }) {
+export default function CatalogViewer({ pages, totalPages, title, onBack }) {
   const [currentPage, setCurrentPage] = useState(1)
   const [fullscreen, setFullscreen] = useState(false)
   const [dragState, setDragState] = useState({ active: false, x: 0 })
@@ -123,7 +123,7 @@ export default function CatalogViewer({ pages, totalPages, onBack }) {
           className="flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-colors"
         >
           <span className="material-symbols-outlined">arrow_back</span>
-          <span className="text-sm font-medium">Volver</span>
+          <span className="text-sm font-medium truncate max-w-48">{title || 'Volver'}</span>
         </button>
 
         <div className="flex items-center gap-3">
