@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import CatalogGrid from './components/CatalogGrid'
 import CatalogViewer from './components/CatalogViewer'
 import { renderPdfPages } from './lib/pdfRenderer'
+import { downloadFromDrive } from './lib/drive'
 
 export default function App() {
   const [view, setView] = useState('grid')
@@ -17,19 +18,14 @@ export default function App() {
     setCatalogTitle(catalog.title)
     setView('viewer')
     try {
-      const url = catalog.url || `https://docs.google.com/uc?export=download&confirm=t&id=${catalog.fileId}`
-      const res = await fetch(url)
-      if (!res.ok) throw new Error('Error al descargar el archivo')
-      const arrayBuffer = await res.arrayBuffer()
+      const arrayBuffer = catalog.fileId
+        ? await downloadFromDrive(catalog.fileId)
+        : await fetch(catalog.url).then(r => { if (!r.ok) throw new Error('Error al descargar'); return r.arrayBuffer() })
       const result = await renderPdfPages(arrayBuffer)
       setTotalPages(result.totalPages)
       setPages(result.pages)
     } catch (err) {
-      setError(
-        err.message === 'Failed to fetch'
-          ? 'No se pudo descargar el catálogo. Verifica que el archivo sea público en Google Drive.'
-          : err.message || 'Error al cargar el catálogo'
-      )
+      setError(err.message || 'Error al cargar el catálogo')
       setPages(null)
     } finally {
       setLoading(false)
