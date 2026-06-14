@@ -51,7 +51,7 @@ export default function CatalogCard({ catalog, thumbnail, onOpen }) {
           )}
 
           <div
-            className="absolute bottom-1 left-1 right-1 px-1 py-0.5 rounded bg-black/60 text-white/80 text-[7px] font-medium leading-tight truncate text-center"
+            className="absolute bottom-0 left-0 right-0 px-1.5 py-1 rounded-b bg-black/75 text-white/90 text-[9px] font-semibold leading-snug truncate text-center"
           >
             {catalog.title}
           </div>

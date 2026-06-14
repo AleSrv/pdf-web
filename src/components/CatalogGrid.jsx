@@ -28,10 +28,10 @@ export default function CatalogGrid({ onOpenCatalog }) {
   }, [])
 
   return (
-    <div className="h-full flex flex-col px-6 lg:px-10 xl:px-16 py-4 lg:py-6 overflow-y-auto">
+    <div className="h-full flex flex-col px-8 lg:px-16 xl:px-24 py-4 lg:py-6 overflow-y-auto">
       <header className="mb-5">
         <h1 className="text-xl lg:text-2xl font-bold text-on-surface mb-1">
-          Catálogos
+          Fichas Samsung 2026
         </h1>
         <p className="text-on-surface-variant text-xs">
           Selecciona un catálogo para visualizarlo
