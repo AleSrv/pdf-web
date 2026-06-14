@@ -7,8 +7,8 @@ Construido con React 19, Vite 6, Tailwind CSS v4 y pdfjs-dist.
 
 ## Características
 
-- **Grid de catálogos** — Pantalla principal con tarjetas de cada catálogo disponible
-- **Carga desde Google Drive** — Los PDFs se descargan desde Drive (archivos públicos)
+- **Grid de catálogos** — 40 fichas técnicas de Samsung (TVs, barras de sonido, The Frame, etc.)
+- **Carga desde Google Drive** — Los PDFs se descargan mediante la API de Google Drive
 - **Navegación por arrastre** — Deslizar con mouse o dedo (táctil)
 - **Navegación por teclado** — ← →, Home, End
 - **Tap en bordes** — Toca el 30% izquierdo/derecho para avanzar/retroceder
@@ -16,6 +16,19 @@ Construido con React 19, Vite 6, Tailwind CSS v4 y pdfjs-dist.
 - **Pantalla completa** — Botón para expandir
 - **Tema oscuro** — Diseño Stitch con acentos periwinkle (#c0c1ff)
 - **Responsive** — Funciona en móvil y desktop
+
+## Requisitos
+
+Antes de arrancar, necesitás una **API Key de Google** con Drive API activada:
+
+1. Ir a [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
+2. Crear proyecto → Activar [Drive API](https://console.cloud.google.com/apis/library/drive.googleapis.com)
+3. Crear API Key con restricción HTTP referrers: `http://localhost:5173/*` y `https://tu-dominio.com/*`
+4. Copiar la key a `.env`:
+
+```bash
+VITE_GOOGLE_API_KEY=tu_api_key_aqui
+```
 
 ## Uso
 
@@ -26,13 +39,11 @@ npm run dev
 
 Abrir en `http://localhost:5173`
 
-Selecciona un catálogo del grid para visualizarlo.
-
 ## Agregar un catálogo
 
-1. Sube el PDF a Google Drive como archivo público
-2. Copia el **fileId** de la URL (ej: `1ABCxyz...`)
-3. Edita `src/data/catalogos.js`:
+1. Subí el PDF a Google Drive como **público**
+2. Copiá el `fileId` de la URL (ej: `1ABCxyz...`)
+3. Agregalo en `src/data/catalogos.js`:
 
 ```js
 {
@@ -59,5 +70,6 @@ npm run preview
 | Frontend | React 19 |
 | Estilos | Tailwind CSS v4 |
 | PDF | pdfjs-dist 4 |
+| Drive API | Google Drive v3 |
 | Iconos | Material Symbols Outlined |
 | Tipografía | Inter |
