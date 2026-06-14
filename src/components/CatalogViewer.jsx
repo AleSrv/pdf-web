@@ -248,7 +248,7 @@ export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBl
         </span>
 
         <div className="flex items-center gap-1.5 lg:gap-2">
-          <div className="flex items-center gap-0.5 bg-surface-high/50 rounded-lg px-1.5 py-1">
+          <div className="hidden sm:flex items-center gap-0.5 bg-surface-high/50 rounded-lg px-1.5 py-1">
             <button
               onClick={handleZoomOut}
               disabled={scale <= 0.5}
