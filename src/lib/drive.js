@@ -23,7 +23,13 @@ export async function downloadFromDrive(fileId) {
   if (fallback) return fallback
 
   throw new Error(
-    'No se pudo descargar el archivo. Verifica que el PDF esté compartido como público ' +
+    'No se pudo descargar de Drive. Compartí el PDF como público ' +
     '("Cualquiera con el enlace" → "Lector") en Google Drive.'
   )
+}
+
+export async function downloadFromUrl(url) {
+  const res = await fetch(encodeURI(url))
+  if (!res.ok) throw new Error('Error al descargar el archivo')
+  return await res.arrayBuffer()
 }

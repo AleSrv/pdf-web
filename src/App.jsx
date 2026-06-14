@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 import CatalogGrid from './components/CatalogGrid'
 import CatalogViewer from './components/CatalogViewer'
 import { renderPdfPages } from './lib/pdfRenderer'
-import { downloadFromDrive } from './lib/drive'
+import { downloadFromDrive, downloadFromUrl } from './lib/drive'
 
 export default function App() {
   const [view, setView] = useState('grid')
@@ -18,9 +18,9 @@ export default function App() {
     setCatalogTitle(catalog.title)
     setView('viewer')
     try {
-      const arrayBuffer = catalog.fileId
-        ? await downloadFromDrive(catalog.fileId)
-        : await fetch(catalog.url).then(r => { if (!r.ok) throw new Error('Error al descargar'); return r.arrayBuffer() })
+      const arrayBuffer = catalog.url
+        ? await downloadFromUrl(catalog.url)
+        : await downloadFromDrive(catalog.fileId)
       const result = await renderPdfPages(arrayBuffer)
       setTotalPages(result.totalPages)
       setPages(result.pages)
