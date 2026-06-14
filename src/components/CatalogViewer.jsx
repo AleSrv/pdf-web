@@ -210,6 +210,15 @@ export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBl
     setScale(1)
     setOffset({ x: 0, y: 0 })
   }
+  const handleDoubleClick = () => {
+    if (scale > 1.05) {
+      setScale(1)
+      setOffset({ x: 0, y: 0 })
+    } else {
+      setScale(2)
+      setOffset({ x: 0, y: 0 })
+    }
+  }
 
   const page = pages[currentPage - 1]
   if (!page) return null
@@ -330,7 +339,7 @@ export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBl
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={(e) => g.current.pointers.delete(e.pointerId)}
-        onDoubleClick={handleZoomReset}
+        onDoubleClick={handleDoubleClick}
         style={{ touchAction: 'none', cursor: cursorStyle }}
       >
         <div
