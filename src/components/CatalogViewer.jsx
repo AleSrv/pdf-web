@@ -223,14 +223,28 @@ export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBl
   const page = pages[currentPage - 1]
   if (!page) return null
 
-  const pageUrl = window.location.href
+  const driveDownloadUrl = catalog?.fileId
+    ? `https://drive.google.com/uc?export=download&id=${catalog.fileId}`
+    : window.location.href
   const shareText = encodeURIComponent(`${title} — Ficha técnica Samsung`)
-  const shareUrl = encodeURIComponent(pageUrl)
+  const shareUrl = encodeURIComponent(driveDownloadUrl)
 
   const downloadUrl = pdfBlob ? URL.createObjectURL(pdfBlob) : null
 
   const isZoomed = scale > 1.05
   const cursorStyle = isZoomed ? 'grab' : 'default'
+
+  const handleNativeShare = async () => {
+    if (!pdfBlob || !navigator.share) return false
+    const file = new File([pdfBlob], `${title || 'catalogo'}.pdf`, { type: 'application/pdf' })
+    if (navigator.canShare && !navigator.canShare({ files: [file] })) return false
+    try {
+      await navigator.share({ files: [file], title: title })
+      return true
+    } catch {
+      return false
+    }
+  }
 
   return (
     <div className="flex flex-col h-full">
@@ -287,7 +301,10 @@ export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBl
 
           <div className="relative" ref={shareRef}>
             <button
-              onClick={() => setShowShareMenu((v) => !v)}
+              onClick={async () => {
+                const shared = await handleNativeShare()
+                if (!shared) setShowShareMenu((v) => !v)
+              }}
               className="p-2 rounded-lg hover:bg-surface-high transition-colors text-on-surface-variant hover:text-on-surface"
               title="Compartir"
             >
