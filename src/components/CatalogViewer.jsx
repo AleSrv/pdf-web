@@ -273,10 +273,6 @@ export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBl
             </button>
           </div>
 
-          <span className="text-xs text-on-surface-variant hidden sm:block">
-            <span className="font-semibold text-on-surface">{currentPage}</span>/{totalPages}
-          </span>
-
           {downloadUrl && (
             <a
               href={downloadUrl}
