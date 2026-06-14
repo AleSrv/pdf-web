@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import CatalogGrid from './components/CatalogGrid'
 import CatalogViewer from './components/CatalogViewer'
 import { renderPdfPages } from './lib/pdfRenderer'
@@ -11,16 +11,21 @@ export default function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [catalogTitle, setCatalogTitle] = useState('')
+  const [currentCatalog, setCurrentCatalog] = useState(null)
+  const pdfBlobRef = useRef(null)
 
   const handleOpenCatalog = useCallback(async (catalog) => {
     setLoading(true)
     setError(null)
     setCatalogTitle(catalog.title)
+    setCurrentCatalog(catalog)
     setView('viewer')
     try {
       const arrayBuffer = catalog.url
         ? await downloadFromUrl(catalog.url)
         : await downloadFromDrive(catalog.fileId)
+      const blob = new Blob([arrayBuffer], { type: 'application/pdf' })
+      pdfBlobRef.current = blob
       const result = await renderPdfPages(arrayBuffer)
       setTotalPages(result.totalPages)
       setPages(result.pages)
@@ -82,6 +87,8 @@ export default function App() {
       pages={pages}
       totalPages={totalPages}
       title={catalogTitle}
+      catalog={currentCatalog}
+      pdfBlob={pdfBlobRef.current}
       onBack={handleBack}
     />
   )
