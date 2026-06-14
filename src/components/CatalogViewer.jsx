@@ -240,7 +240,6 @@ export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBl
           className="flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-colors shrink-0"
         >
           <span className="material-symbols-outlined">arrow_back</span>
-          <span className="text-sm font-medium truncate max-w-32 lg:max-w-48">{title || 'Volver'}</span>
         </button>
 
         <div className="flex items-center gap-1.5 lg:gap-2">
@@ -332,57 +331,65 @@ export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBl
         </div>
       </header>
 
-      <div
-        ref={containerRef}
-        className="flex-1 flex items-center justify-center overflow-hidden relative select-none"
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={(e) => g.current.pointers.delete(e.pointerId)}
-        onDoubleClick={handleDoubleClick}
-        style={{ touchAction: 'none', cursor: cursorStyle }}
-      >
-        <div
-          className="relative"
-          style={{
-            transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
-            transition: g.current.mode ? 'none' : 'transform 0.2s ease-out',
-          }}
-        >
-          <img
-            src={page.src}
-            alt={`Página ${currentPage}`}
-            className="max-h-[calc(100vh-10rem)] max-w-[95vw] object-contain rounded-lg shadow-2xl"
-            draggable={false}
-          />
+      <div className="flex-1 flex flex-col overflow-hidden relative select-none">
+        <div className="text-center py-1.5 px-4 shrink-0">
+          <span className="text-sm font-medium text-on-surface truncate max-w-xs lg:max-w-sm mx-auto block">
+            {title}
+          </span>
         </div>
 
-        {!isZoomed && currentPage > 1 && (
+        <div
+          ref={containerRef}
+          className="flex-1 flex items-center justify-center overflow-hidden relative"
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={(e) => g.current.pointers.delete(e.pointerId)}
+          onDoubleClick={handleDoubleClick}
+          style={{ touchAction: 'none', cursor: cursorStyle }}
+        >
           <div
-            className="absolute left-4 top-1/2 -translate-y-1/2 hidden lg:block"
-            onPointerDown={(e) => e.stopPropagation()}
+            className="relative"
+            style={{
+              transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
+              transition: g.current.mode ? 'none' : 'transform 0.2s ease-out',
+            }}
           >
-            <button
-              onClick={() => goTo(currentPage - 1)}
-              className="w-10 h-10 rounded-full bg-surface-mid/80 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:bg-surface-high transition-colors cursor-pointer opacity-0 hover:opacity-100"
-            >
-              <span className="material-symbols-outlined text-on-surface-variant">chevron_left</span>
-            </button>
+            <img
+              src={page.src}
+              alt={`Página ${currentPage}`}
+              className="max-h-[calc(100vh-12rem)] max-w-[95vw] object-contain rounded-lg shadow-2xl"
+              draggable={false}
+            />
           </div>
-        )}
-        {!isZoomed && currentPage < totalPages && (
-          <div
-            className="absolute right-4 top-1/2 -translate-y-1/2 hidden lg:block"
-            onPointerDown={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => goTo(currentPage + 1)}
-              className="w-10 h-10 rounded-full bg-surface-mid/80 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:bg-surface-high transition-colors cursor-pointer opacity-0 hover:opacity-100"
+
+          {!isZoomed && currentPage > 1 && (
+            <div
+              className="absolute left-4 top-1/2 -translate-y-1/2 hidden lg:block"
+              onPointerDown={(e) => e.stopPropagation()}
             >
-              <span className="material-symbols-outlined text-on-surface-variant">chevron_right</span>
-            </button>
-          </div>
-        )}
+              <button
+                onClick={() => goTo(currentPage - 1)}
+                className="w-10 h-10 rounded-full bg-surface-mid/80 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:bg-surface-high transition-colors cursor-pointer opacity-0 hover:opacity-100"
+              >
+                <span className="material-symbols-outlined text-on-surface-variant">chevron_left</span>
+              </button>
+            </div>
+          )}
+          {!isZoomed && currentPage < totalPages && (
+            <div
+              className="absolute right-4 top-1/2 -translate-y-1/2 hidden lg:block"
+              onPointerDown={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => goTo(currentPage + 1)}
+                className="w-10 h-10 rounded-full bg-surface-mid/80 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:bg-surface-high transition-colors cursor-pointer opacity-0 hover:opacity-100"
+              >
+                <span className="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="shrink-0">
