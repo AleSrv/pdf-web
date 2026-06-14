@@ -51,9 +51,9 @@ export default function CatalogCard({ catalog, thumbnail, onOpen }) {
           )}
 
           <div
-            className="absolute bottom-1 right-1 px-1 py-0.5 rounded bg-black/50 text-white/70 text-[6px] font-semibold uppercase tracking-wider leading-none"
+            className="absolute bottom-1 left-1 right-1 px-1 py-0.5 rounded bg-black/60 text-white/80 text-[7px] font-medium leading-tight truncate text-center"
           >
-            {catalog.pages}p
+            {catalog.title}
           </div>
         </div>
       </div>
