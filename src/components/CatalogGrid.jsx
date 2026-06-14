@@ -1,7 +1,32 @@
+import { useState, useEffect } from 'react'
 import CatalogCard from './CatalogCard'
 import { catalogos } from '../data/catalogos'
+import { getThumbnailUrl } from '../lib/drive'
 
 export default function CatalogGrid({ onOpenCatalog }) {
+  const [thumbnails, setThumbnails] = useState({})
+
+  useEffect(() => {
+    let mounted = true
+    const fetchAll = async () => {
+      const results = await Promise.allSettled(
+        catalogos.map(cat =>
+          getThumbnailUrl(cat.fileId).then(url => ({ id: cat.id, url }))
+        )
+      )
+      if (!mounted) return
+      const thumbs = {}
+      for (const r of results) {
+        if (r.status === 'fulfilled' && r.value.url) {
+          thumbs[r.value.id] = r.value.url
+        }
+      }
+      setThumbnails(thumbs)
+    }
+    fetchAll()
+    return () => { mounted = false }
+  }, [])
+
   return (
     <div className="h-full flex flex-col px-6 lg:px-10 xl:px-16 py-4 lg:py-6 overflow-y-auto">
       <header className="mb-5">
@@ -28,7 +53,12 @@ export default function CatalogGrid({ onOpenCatalog }) {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
           {catalogos.map((cat) => (
-            <CatalogCard key={cat.id} catalog={cat} onOpen={onOpenCatalog} />
+            <CatalogCard
+              key={cat.id}
+              catalog={cat}
+              thumbnail={thumbnails[cat.id]}
+              onOpen={onOpenCatalog}
+            />
           ))}
         </div>
       )}

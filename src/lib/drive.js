@@ -33,3 +33,11 @@ export async function downloadFromUrl(url) {
   if (!res.ok) throw new Error('Error al descargar el archivo')
   return await res.arrayBuffer()
 }
+
+export async function getThumbnailUrl(fileId) {
+  const url = `https://www.googleapis.com/drive/v3/files/${fileId}?fields=thumbnailLink,hasThumbnail&key=${API_KEY}`
+  const res = await fetch(url)
+  if (!res.ok) return null
+  const data = await res.json()
+  return data.hasThumbnail ? data.thumbnailLink : null
+}
