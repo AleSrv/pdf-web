@@ -330,6 +330,7 @@ export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBl
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={(e) => g.current.pointers.delete(e.pointerId)}
+        onDoubleClick={handleZoomReset}
         style={{ touchAction: 'none', cursor: cursorStyle }}
       >
         <div
