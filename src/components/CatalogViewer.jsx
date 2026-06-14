@@ -234,7 +234,7 @@ export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBl
 
   return (
     <div className="flex flex-col h-full">
-      <header className="relative flex items-center justify-between px-4 py-2 bg-surface/80 backdrop-blur-lg border-b border-white/5 shrink-0 gap-2">
+      <header className="relative flex items-center justify-between px-4 py-2 bg-surface/80 backdrop-blur-lg border-b border-white/5 shrink-0 gap-2 z-20">
         <button
           onClick={onBack}
           className="flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-colors shrink-0 z-10"

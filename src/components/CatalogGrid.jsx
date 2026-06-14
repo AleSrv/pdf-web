@@ -112,7 +112,7 @@ export default function CatalogGrid({ onOpenCatalog }) {
 
       <div className="px-8 lg:px-16 xl:px-24 py-4 lg:py-6">
         <header className="mb-5 py-3">
-          <div className="flex flex-wrap items-center gap-3 my-4">
+          <div className="flex flex-wrap items-center gap-3 my-6">
             <h1 className="text-xl lg:text-2xl font-bold text-on-surface">
               Fichas Samsung 2026
             </h1>
