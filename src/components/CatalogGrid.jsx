@@ -35,7 +35,7 @@ export default function CatalogGrid({ onOpenCatalog }) {
 
   return (
     <div className="h-full flex flex-col px-8 lg:px-16 xl:px-24 py-4 lg:py-6 overflow-y-auto">
-      <header className="mb-5">
+      <header className="mb-5 py-3">
         <div className="flex flex-wrap items-center gap-3 my-4">
           <h1 className="text-xl lg:text-2xl font-bold text-on-surface">
             Fichas Samsung 2026
@@ -58,7 +58,7 @@ export default function CatalogGrid({ onOpenCatalog }) {
             ))}
           </div>
         </div>
-        <p className="text-on-surface-variant text-xs">
+        <p className="text-on-surface-variant text-xs my-3">
           Selecciona un catálogo para visualizarlo
         </p>
       </header>

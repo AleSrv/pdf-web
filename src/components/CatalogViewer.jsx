@@ -240,7 +240,7 @@ export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBl
           className="flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-colors shrink-0 z-10"
         >
           <span className="material-symbols-outlined">arrow_back</span>
-          <span className="text-sm font-medium">Volver a Fichas</span>
+          <span className="text-sm font-medium">Volver<span className="hidden sm:inline"> a Fichas</span></span>
         </button>
 
         <span className="absolute left-1/2 -translate-x-1/2 text-sm font-medium text-on-surface truncate max-w-40 lg:max-w-64">
