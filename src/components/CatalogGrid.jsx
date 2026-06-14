@@ -36,7 +36,7 @@ export default function CatalogGrid({ onOpenCatalog }) {
   return (
     <div className="h-full flex flex-col px-8 lg:px-16 xl:px-24 py-4 lg:py-6 overflow-y-auto">
       <header className="mb-5">
-        <div className="flex items-center justify-between my-4">
+        <div className="flex flex-wrap items-center gap-3 my-4">
           <h1 className="text-xl lg:text-2xl font-bold text-on-surface">
             Fichas Samsung 2026
           </h1>
@@ -48,7 +48,7 @@ export default function CatalogGrid({ onOpenCatalog }) {
             ].map(cat => (
               <button key={cat.key}
                 onClick={() => setFilter(cat.key)}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+                className={`px-5 py-2 rounded-full text-sm font-semibold transition-colors ${
                   filter === cat.key
                     ? 'bg-primary text-on-primary'
                     : 'bg-surface text-outline hover:text-on-surface-variant'
