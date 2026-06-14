@@ -5,12 +5,26 @@ import ThumbnailStrip from './ThumbnailStrip'
 export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBlob, onBack }) {
   const [currentPage, setCurrentPage] = useState(1)
   const [fullscreen, setFullscreen] = useState(false)
-  const [dragState, setDragState] = useState({ active: false, x: 0 })
   const [scale, setScale] = useState(1)
+  const [offset, setOffset] = useState({ x: 0, y: 0 })
   const [showShareMenu, setShowShareMenu] = useState(false)
   const containerRef = useRef(null)
-  const dragRef = useRef({ startX: 0, startPage: 0, delta: 0, active: false })
   const shareRef = useRef(null)
+  const g = useRef({
+    pointers: new Map(),
+    mode: null, // 'pinch' | 'pan' | 'navigate' | null
+    startScale: 1,
+    startOffset: { x: 0, y: 0 },
+    startDist: 0,
+    startMid: { x: 0, y: 0 },
+    startPage: 1,
+    startX: 0,
+    startY: 0,
+    moved: false,
+    containerWidth: 0,
+    clickX: 0,
+    clickY: 0,
+  })
 
   const goTo = useCallback((page) => {
     const next = Math.max(1, Math.min(page, totalPages))
@@ -76,58 +90,126 @@ export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBl
     return () => document.removeEventListener('fullscreenchange', handler)
   }, [])
 
+  const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y)
+  const mid = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 })
+
   const handlePointerDown = (e) => {
-    if (!e.isPrimary) return
-    e.currentTarget.setPointerCapture(e.pointerId)
-    const rect = e.currentTarget.getBoundingClientRect()
-    dragRef.current = {
-      startX: e.clientX,
-      startY: e.clientY,
-      startPage: currentPage,
-      delta: 0,
-      moved: false,
-      active: true,
-      containerWidth: rect.width,
-      clickX: e.clientX - rect.left,
+    g.current.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+    if (g.current.pointers.size === 1) {
+      const rect = e.currentTarget.getBoundingClientRect()
+      g.current.startX = e.clientX
+      g.current.startY = e.clientY
+      g.current.startPage = currentPage
+      g.current.moved = false
+      g.current.containerWidth = rect.width
+      g.current.clickX = e.clientX - rect.left
+      g.current.clickY = e.clientY - rect.top
+      g.current.mode = null
+      e.currentTarget.setPointerCapture(e.pointerId)
+    } else if (g.current.pointers.size === 2) {
+      const ptrs = [...g.current.pointers.values()]
+      g.current.mode = 'pinch'
+      g.current.startDist = dist(ptrs[0], ptrs[1])
+      g.current.startMid = mid(ptrs[0], ptrs[1])
+      g.current.startScale = scale
+      g.current.startOffset = { ...offset }
     }
-    setDragState({ active: true, x: 0 })
   }
 
   const handlePointerMove = (e) => {
-    if (!dragRef.current.active) return
-    const deltaX = e.clientX - dragRef.current.startX
-    const deltaY = e.clientY - dragRef.current.startY
-    if (Math.abs(deltaX) < 8 && Math.abs(deltaY) < 8) return
-    dragRef.current.delta = deltaX
-    dragRef.current.moved = true
-    setDragState({ active: true, x: deltaX })
+    const prev = g.current.pointers.get(e.pointerId)
+    if (!prev) return
+    g.current.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+    if (g.current.mode === 'pinch' && g.current.pointers.size === 2) {
+      const ptrs = [...g.current.pointers.values()]
+      const d = dist(ptrs[0], ptrs[1])
+      const m = mid(ptrs[0], ptrs[1])
+      const s = Math.max(0.5, Math.min(3, g.current.startScale * (d / g.current.startDist)))
+      setScale(s)
+      setOffset({
+        x: g.current.startOffset.x + (m.x - g.current.startMid.x),
+        y: g.current.startOffset.y + (m.y - g.current.startMid.y),
+      })
+      return
+    }
+
+    if (g.current.pointers.size !== 1) return
+
+    const dx = e.clientX - g.current.startX
+    const dy = e.clientY - g.current.startY
+
+    if (!g.current.moved && Math.abs(dx) < 8 && Math.abs(dy) < 8) return
+
+    g.current.moved = true
+
+    if (g.current.mode === null) {
+      g.current.mode = scale > 1.05 ? 'pan' : 'navigate'
+    }
+
+    if (g.current.mode === 'pan') {
+      setOffset({ x: g.current.startOffset.x + dx, y: g.current.startOffset.y + dy })
+    } else if (g.current.mode === 'navigate') {
+      // existing drag feedback
+    }
   }
 
-  const handlePointerUp = () => {
-    if (!dragRef.current.active) return
-    const r = dragRef.current
-    r.active = false
-    if (!r.moved) {
-      const w = r.containerWidth
-      if (r.clickX < w * 0.3 && r.startPage > 1) {
-        goTo(r.startPage - 1)
-      } else if (r.clickX > w * 0.7 && r.startPage < totalPages) {
-        goTo(r.startPage + 1)
-      }
-    } else {
-      const threshold = (containerRef.current?.offsetWidth || 800) * 0.18
-      if (r.delta > threshold && r.startPage > 1) {
-        goTo(r.startPage - 1)
-      } else if (r.delta < -threshold && r.startPage < totalPages) {
-        goTo(r.startPage + 1)
+  const handlePointerUp = (e) => {
+    g.current.pointers.delete(e.pointerId)
+
+    if (g.current.mode === 'pinch') {
+      if (g.current.pointers.size < 2) g.current.mode = null
+      return
+    }
+
+    if (g.current.mode === 'pan') {
+      g.current.mode = null
+      return
+    }
+
+    if (g.current.mode === 'navigate' || g.current.mode === null) {
+      const r = g.current
+      if (!r.moved) {
+        const w = r.containerWidth
+        if (r.clickX < w * 0.3 && r.startPage > 1) {
+          goTo(r.startPage - 1)
+        } else if (r.clickX > w * 0.7 && r.startPage < totalPages) {
+          goTo(r.startPage + 1)
+        }
+      } else {
+        const threshold = (containerRef.current?.offsetWidth || 800) * 0.18
+        const delta = e.clientX - r.startX
+        if (delta > threshold && r.startPage > 1) {
+          goTo(r.startPage - 1)
+        } else if (delta < -threshold && r.startPage < totalPages) {
+          goTo(r.startPage + 1)
+        }
       }
     }
-    setDragState({ active: false, x: 0 })
+    g.current.mode = null
   }
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const handler = (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault()
+        const delta = -e.deltaY * 0.002
+        setScale((s) => Math.max(0.5, Math.min(3, s + delta)))
+      }
+    }
+    el.addEventListener('wheel', handler, { passive: false })
+    return () => el.removeEventListener('wheel', handler)
+  }, [])
 
   const handleZoomIn = () => setScale((s) => Math.min(s + 0.25, 3))
   const handleZoomOut = () => setScale((s) => Math.max(s - 0.25, 0.5))
-  const handleZoomReset = () => setScale(1)
+  const handleZoomReset = () => {
+    setScale(1)
+    setOffset({ x: 0, y: 0 })
+  }
 
   const page = pages[currentPage - 1]
   if (!page) return null
@@ -137,6 +219,9 @@ export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBl
   const shareUrl = encodeURIComponent(pageUrl)
 
   const downloadUrl = pdfBlob ? URL.createObjectURL(pdfBlob) : null
+
+  const isZoomed = scale > 1.05
+  const cursorStyle = isZoomed ? 'grab' : 'default'
 
   return (
     <div className="flex flex-col h-full">
@@ -244,15 +329,14 @@ export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBl
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
-        style={{ touchAction: 'none' }}
+        onPointerCancel={(e) => g.current.pointers.delete(e.pointerId)}
+        style={{ touchAction: 'none', cursor: cursorStyle }}
       >
         <div
-          className="relative max-h-full max-w-full"
+          className="relative"
           style={{
-            transform: dragState.active
-              ? `translateX(${dragState.x}px) rotate(${dragState.x * 0.01}deg) scale(${scale})`
-              : `scale(${scale})`,
-            transition: dragState.active ? 'none' : 'transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
+            transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
+            transition: g.current.mode ? 'none' : 'transform 0.2s ease-out',
           }}
         >
           <img
@@ -263,34 +347,32 @@ export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBl
           />
         </div>
 
-        {currentPage > 1 && (
+        {!isZoomed && currentPage > 1 && (
           <div
             className="absolute left-4 top-1/2 -translate-y-1/2 hidden lg:block"
             onPointerDown={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => goTo(currentPage - 1)}
-              className="w-10 h-10 rounded-full bg-surface-mid/80 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:bg-surface-high transition-colors cursor-pointer opacity-0 hover:opacity-100 transition-opacity"
+              className="w-10 h-10 rounded-full bg-surface-mid/80 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:bg-surface-high transition-colors cursor-pointer opacity-0 hover:opacity-100"
             >
               <span className="material-symbols-outlined text-on-surface-variant">chevron_left</span>
             </button>
           </div>
         )}
-        {currentPage < totalPages && (
+        {!isZoomed && currentPage < totalPages && (
           <div
             className="absolute right-4 top-1/2 -translate-y-1/2 hidden lg:block"
             onPointerDown={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => goTo(currentPage + 1)}
-              className="w-10 h-10 rounded-full bg-surface-mid/80 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:bg-surface-high transition-colors cursor-pointer opacity-0 hover:opacity-100 transition-opacity"
+              className="w-10 h-10 rounded-full bg-surface-mid/80 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:bg-surface-high transition-colors cursor-pointer opacity-0 hover:opacity-100"
             >
               <span className="material-symbols-outlined text-on-surface-variant">chevron_right</span>
             </button>
           </div>
         )}
-
-        <div className="absolute inset-0 pointer-events-none lg:pointer-events-auto lg:opacity-0 lg:hover:opacity-100 transition-opacity" />
       </div>
 
       <div className="shrink-0">
