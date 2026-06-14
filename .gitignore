@@ -4,3 +4,6 @@ pdfs/
 .DS_Store
 *.local
 .env
+
+# Local Netlify folder
+.netlify
