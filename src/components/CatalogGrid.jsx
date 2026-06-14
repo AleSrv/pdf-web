@@ -36,31 +36,32 @@ export default function CatalogGrid({ onOpenCatalog }) {
   return (
     <div className="h-full flex flex-col px-8 lg:px-16 xl:px-24 py-4 lg:py-6 overflow-y-auto">
       <header className="mb-5">
-        <h1 className="text-xl lg:text-2xl font-bold text-on-surface my-4">
-          Fichas Samsung 2026
-        </h1>
+        <div className="flex items-center justify-between my-4">
+          <h1 className="text-xl lg:text-2xl font-bold text-on-surface">
+            Fichas Samsung 2026
+          </h1>
+          <div className="flex gap-2">
+            {[
+              { key: 'all', label: 'Todo' },
+              { key: 'video', label: 'Video' },
+              { key: 'audio', label: 'Audio' },
+            ].map(cat => (
+              <button key={cat.key}
+                onClick={() => setFilter(cat.key)}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+                  filter === cat.key
+                    ? 'bg-primary text-on-primary'
+                    : 'bg-surface text-outline hover:text-on-surface-variant'
+                }`}>
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
         <p className="text-on-surface-variant text-xs">
           Selecciona un catálogo para visualizarlo
         </p>
       </header>
-
-      <div className="flex gap-2 mb-5">
-        {[
-          { key: 'all', label: 'Todo' },
-          { key: 'video', label: 'Video' },
-          { key: 'audio', label: 'Audio' },
-        ].map(cat => (
-          <button key={cat.key}
-            onClick={() => setFilter(cat.key)}
-            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors ${
-              filter === cat.key
-                ? 'bg-primary text-on-primary'
-                : 'bg-surface text-outline hover:text-on-surface-variant'
-            }`}>
-            {cat.label}
-          </button>
-        ))}
-      </div>
 
       {catalogos.length === 0 ? (
         <div className="flex-1 flex items-center justify-center">
