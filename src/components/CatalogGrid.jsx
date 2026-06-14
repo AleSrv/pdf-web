@@ -39,44 +39,54 @@ export default function CatalogGrid({ onOpenCatalog }) {
     [filter]
   )
 
-  const handleTouchStart = (e) => {
-    if (scrollRef.current && scrollRef.current.scrollTop === 0) {
-      pullRef.current.startY = e.touches[0].clientY
-      pullRef.current.phase = 'idle'
-    }
-  }
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
 
-  const handleTouchMove = (e) => {
-    if (!scrollRef.current || scrollRef.current.scrollTop > 0) return
-    const dy = e.touches[0].clientY - pullRef.current.startY
-    if (dy <= 0) return
-    e.preventDefault()
-    const dist = Math.round(dy / 2.5)
-    pullRef.current.distance = dist
-    pullRef.current.phase = dist >= THRESHOLD ? 'ready' : 'pulling'
-    setPullDistance(dist)
-    setPullPhase(pullRef.current.phase)
-  }
-
-  const handleTouchEnd = () => {
-    if (pullRef.current.phase === 'ready') {
-      setPullPhase('refreshing')
-      setPullDistance(THRESHOLD)
-      window.location.reload()
-    } else {
-      pullRef.current.phase = 'idle'
-      setPullPhase('idle')
-      setPullDistance(0)
+    const onStart = (e) => {
+      if (el.scrollTop === 0) {
+        pullRef.current.startY = e.touches[0].clientY
+        pullRef.current.phase = 'idle'
+      }
     }
-  }
+
+    const onMove = (e) => {
+      if (el.scrollTop > 0) return
+      const dy = e.touches[0].clientY - pullRef.current.startY
+      if (dy <= 0) return
+      e.preventDefault()
+      const dist = Math.round(dy / 2.5)
+      pullRef.current.distance = dist
+      pullRef.current.phase = dist >= THRESHOLD ? 'ready' : 'pulling'
+      setPullDistance(dist)
+      setPullPhase(pullRef.current.phase)
+    }
+
+    const onEnd = () => {
+      if (pullRef.current.phase === 'ready') {
+        setPullPhase('refreshing')
+        setPullDistance(THRESHOLD)
+        window.location.reload()
+      } else {
+        pullRef.current.phase = 'idle'
+        setPullPhase('idle')
+        setPullDistance(0)
+      }
+    }
+
+    el.addEventListener('touchstart', onStart, { passive: true })
+    el.addEventListener('touchmove', onMove, { passive: false })
+    el.addEventListener('touchend', onEnd, { passive: true })
+
+    return () => {
+      el.removeEventListener('touchstart', onStart)
+      el.removeEventListener('touchmove', onMove)
+      el.removeEventListener('touchend', onEnd)
+    }
+  }, [])
 
   return (
-    <div className="h-full flex flex-col overflow-y-auto relative"
-      ref={scrollRef}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-    >
+    <div className="h-full flex flex-col overflow-y-auto relative" ref={scrollRef}>
       {pullPhase !== 'idle' && (
         <div
           className="shrink-0 flex items-center justify-center gap-2 transition-none"
