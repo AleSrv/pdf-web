@@ -5,6 +5,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1YwgT7jULp-tbsn4-7MA3EFKJXtf1coj7',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'hw-q600h',
@@ -12,6 +13,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica 2026',
     fileId: '1VSj4zqyN4nCCrj7g3uErXHjd2rhGEob-',
     pages: 2,
+    category: 'audio',
   },
   {
     id: 'hw-q800h',
@@ -19,6 +21,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica 2026',
     fileId: '1ucMjraIIeMLrAX3YOr5d0AoSZqDnBCWJ',
     pages: 2,
+    category: 'audio',
   },
   {
     id: 'hw-q930h',
@@ -26,6 +29,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica 2026',
     fileId: '1d9SrhmgF8p1Tu6W8dsR3-a1TbW2mj1CJ',
     pages: 2,
+    category: 'audio',
   },
   {
     id: 'hw-q990h',
@@ -33,6 +37,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica 2026',
     fileId: '1K2GxFD4BTXnLBcbdOMzfxPeGBSepWYFx',
     pages: 2,
+    category: 'audio',
   },
   {
     id: 'hw-qs90h',
@@ -40,6 +45,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica 2026',
     fileId: '1-a6CgcJMm5FlA3w7eODPUUdYKfq48jty',
     pages: 2,
+    category: 'audio',
   },
   {
     id: 'ls50-51h',
@@ -47,6 +53,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica 2026',
     fileId: '1LlyIqU_7fso3iOYje_tWyTLxceEoZqEx',
     pages: 2,
+    category: 'audio',
   },
   {
     id: 'ls70-71h',
@@ -54,6 +61,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica 2026',
     fileId: '1zN_gDY_mYE3_GqFTJvPzHeDAO_gQzhjj',
     pages: 2,
+    category: 'audio',
   },
   {
     id: 'one-connect',
@@ -61,6 +69,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1OcEmo0pmf1nxVlY3wrVGXfDmo0u6TEiB',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'f6000f-2025',
@@ -68,6 +77,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '18ParPf1I8rMZAUFh3-pL0pME8GPJGVTn',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'f6000f-2026',
@@ -75,6 +85,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '16OjwaJUG8KblCk-MthZKc3NS_gMMt14b',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'f6005f-2026',
@@ -82,6 +93,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1FZltqkEU9pl9IPUz1yQ4GCshBExkbGUN',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'h5000f-2026',
@@ -89,6 +101,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1AQMwqITOS4rkGWcopOZ74nN4D-X6v8KE',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'h5005f-2026',
@@ -96,6 +109,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1Illjcemk4F8z70gSZzeEd5axvW8UWcqF',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'm72h-2026',
@@ -103,6 +117,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1U9eoxANa1qfYEcWQUSm28O58qkbPmGw0',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'm73h-2026',
@@ -110,6 +125,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1YOdeFw1xDs2Q9Dhne2RVSRSmlasOCLWC',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'm80h-2026',
@@ -117,6 +133,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1cJBALhMXHyL-U7U5vQwKKwWxn5j7S5T1',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'm90h-2026',
@@ -124,6 +141,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1Gg1XnQmK1niDJtF4wJEJ70nx7WbDGqD9',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'microled-2024',
@@ -131,6 +149,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '17hulrOcC13jAbtpoAfQIfZRUnhPVwGKF',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'moving-style-2025',
@@ -138,6 +157,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1MKeEbs_N9FrtmdZY59xOhMh_lBKjiIR3',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'q5f-2026',
@@ -145,6 +165,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1wILEsosjEcW7GM_zrAYRKvRCsgMotS4N',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'qn1eh-2026',
@@ -152,6 +173,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1PZKIHXLpIUtCmwZyuDTPI4PPFJqdCFwN',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'qn70h-2026',
@@ -159,6 +181,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1GBqhloZBLD6dPcCmMUwF30qWcX9TKm3S',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'qn73h-2026',
@@ -166,6 +189,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '18pQZwwGYAi74_XXs0HuWxtXzImECfbpB',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'qn80h-2026',
@@ -173,6 +197,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1byXgM3M4iozHuCTPS7wTqC-shVeQ53Du',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'qn90f-2026',
@@ -180,6 +205,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1RFBoS8Lj3p1B0u0gxEg2mpfD7RbBTXoA',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'r85h-2026',
@@ -187,6 +213,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1he8fuWCD4Eao98vDE42e67URy2FwSOtM',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'r95h-2026',
@@ -194,6 +221,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1Hp7tj_EqajIBgMaOto_yQ4ZNd6eFH9fQ',
     pages: 2,
+    category: 'video',
   },
   {
     id: 's83h-2026',
@@ -201,6 +229,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1jvsq9RW5m138Vs_pu7WDT-gv6isclTxN',
     pages: 2,
+    category: 'video',
   },
   {
     id: 's90h-2026',
@@ -208,6 +237,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1tXUNkhPRQk1PiOIYChbzRLjRgDz7R2kD',
     pages: 2,
+    category: 'video',
   },
   {
     id: 's93h-2026',
@@ -215,6 +245,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1DikxmVcv1b1UYyD7FotiyYIDSES7hrAY',
     pages: 2,
+    category: 'video',
   },
   {
     id: 's95h-2026',
@@ -222,6 +253,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1d7e-oaFiP5M5Qi5fLse2IK8fDtqzwopt',
     pages: 2,
+    category: 'video',
   },
   {
     id: 's99h-2026',
@@ -229,6 +261,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1ebeNg6UzVzMv-9iXweWYCQaZIwLY1z5Y',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'the-frame-2026',
@@ -236,6 +269,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica TV',
     fileId: '1EDpTV0DBewUCFjxFni0cZIQq_JA_CV9a',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'the-frame-pro-2026',
@@ -243,6 +277,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '15tN0Zcqc0GqvVp3tWIA-f7W0LkGGoCKz',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'premiere-5-2025',
@@ -250,6 +285,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1zJFMM4V8tZqxz8brvTCy2PimMQeSSQkA',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'u7005h-2026',
@@ -257,6 +293,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1crS-_hfbOVw5tyZ5rGpOcVzR4IBL--9X',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'u8075h-2026',
@@ -264,6 +301,7 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1Hh-7uX0GvFpqao7zaiaRcAWpDFT3WzJp',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'u9005h-2026',
@@ -271,12 +309,14 @@ export const catalogos = [
     subtitle: 'Ficha técnica',
     fileId: '1yBrrrfWkZYttHjkkNWB07kQW1Mtwoaqi',
     pages: 2,
+    category: 'video',
   },
   {
     id: 'samsung-lista',
-    title: 'Samsung Lista TV 2026',
+    title: 'TV S83H 2026',
     subtitle: 'Listado completo',
     fileId: '1RkEQsBFZzPi27Otn-P-8QVb-NWHlGoA9',
     pages: 2,
+    category: 'video',
   },
 ]

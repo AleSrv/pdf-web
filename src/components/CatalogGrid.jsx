@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import CatalogCard from './CatalogCard'
 import { catalogos } from '../data/catalogos'
 import { getThumbnailUrl } from '../lib/drive'
 
 export default function CatalogGrid({ onOpenCatalog }) {
   const [thumbnails, setThumbnails] = useState({})
+  const [filter, setFilter] = useState('all')
 
   useEffect(() => {
     let mounted = true
@@ -27,16 +28,39 @@ export default function CatalogGrid({ onOpenCatalog }) {
     return () => { mounted = false }
   }, [])
 
+  const filteredCatalogs = useMemo(
+    () => filter === 'all' ? catalogos : catalogos.filter(c => c.category === filter),
+    [filter]
+  )
+
   return (
     <div className="h-full flex flex-col px-8 lg:px-16 xl:px-24 py-4 lg:py-6 overflow-y-auto">
       <header className="mb-5">
-        <h1 className="text-xl lg:text-2xl font-bold text-on-surface mb-1">
+        <h1 className="text-xl lg:text-2xl font-bold text-on-surface my-4">
           Fichas Samsung 2026
         </h1>
         <p className="text-on-surface-variant text-xs">
           Selecciona un catálogo para visualizarlo
         </p>
       </header>
+
+      <div className="flex gap-2 mb-5">
+        {[
+          { key: 'all', label: 'Todo' },
+          { key: 'video', label: 'Video' },
+          { key: 'audio', label: 'Audio' },
+        ].map(cat => (
+          <button key={cat.key}
+            onClick={() => setFilter(cat.key)}
+            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+              filter === cat.key
+                ? 'bg-primary text-on-primary'
+                : 'bg-surface text-outline hover:text-on-surface-variant'
+            }`}>
+            {cat.label}
+          </button>
+        ))}
+      </div>
 
       {catalogos.length === 0 ? (
         <div className="flex-1 flex items-center justify-center">
@@ -52,7 +76,7 @@ export default function CatalogGrid({ onOpenCatalog }) {
         </div>
       ) : (
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-1.5">
-          {catalogos.map((cat) => (
+          {filteredCatalogs.map((cat) => (
             <CatalogCard
               key={cat.id}
               catalog={cat}
