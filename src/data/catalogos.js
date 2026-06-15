@@ -123,7 +123,7 @@ export const catalogos = [
     id: 'moving-style-2025',
     title: 'TV Moving Style 2025',
     subtitle: 'Ficha técnica',
-    fileId: '1bRkfHxh5KWTAy4zkoD3Y5AH-IgekTznH',
+    fileId: '18pQZwwGYAi74_XXs0HuWxtXzImECfbpB',
     pages: 2,
     category: 'video',
   },
