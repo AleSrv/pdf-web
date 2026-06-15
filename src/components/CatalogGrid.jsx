@@ -155,8 +155,19 @@ export default function CatalogGrid({ onOpenCatalog }) {
               placeholder="Buscar modelo..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full bg-surface-low border border-surface-high rounded-full pl-10 pr-4 py-2.5 text-sm text-on-surface placeholder:text-outline outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-colors"
+              className="w-full bg-surface-low border border-surface-high rounded-full pl-10 pr-10 py-2.5 text-sm text-on-surface placeholder:text-outline outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-colors"
             />
+            {search && (
+              <button
+                onClick={() => setSearch('')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-surface-high transition-colors text-outline hover:text-on-surface"
+              >
+                <span
+                  className="material-symbols-outlined text-lg"
+                  style={{ fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20" }}
+                >close</span>
+              </button>
+            )}
           </div>
         </header>
 
