@@ -160,14 +160,6 @@ export const catalogos = [
     category: 'video',
   },
   {
-    id: 's90h-2026',
-    title: 'TV S90H 2026',
-    subtitle: 'Ficha técnica',
-    fileId: '1tXUNkhPRQk1PiOIYChbzRLjRgDz7R2kD',
-    pages: 2,
-    category: 'video',
-  },
-  {
     id: 's93h-2026',
     title: 'TV S93H 2026',
     subtitle: 'Ficha técnica',
