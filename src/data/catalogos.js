@@ -80,14 +80,6 @@ export const catalogos = [
     category: 'video',
   },
   {
-    id: 'f6000f-2026',
-    title: 'TV F6000F 2026',
-    subtitle: 'Ficha técnica',
-    fileId: '16OjwaJUG8KblCk-MthZKc3NS_gMMt14b',
-    pages: 2,
-    category: 'video',
-  },
-  {
     id: 'f6005f-2026',
     title: 'TV F6005F 2026',
     subtitle: 'Ficha técnica',
