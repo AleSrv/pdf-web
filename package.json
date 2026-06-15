@@ -10,7 +10,7 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "pdfjs-dist": "^4.0.0",
+    "pdfjs-dist": "4.10.38",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
