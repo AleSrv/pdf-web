@@ -184,6 +184,14 @@ export const catalogos = [
     category: 'video',
   },
   {
+    id: 'marcos-the-frame',
+    title: 'Marcos The Frame 2026',
+    subtitle: 'Ficha técnica',
+    fileId: '1YwgT7jULp-tbsn4-7MA3EFKJXtf1coj7',
+    pages: 2,
+    category: 'video',
+  },
+  {
     id: 'the-frame-pro-2026',
     title: 'TV The Frame Pro 2026',
     subtitle: 'Ficha técnica',
