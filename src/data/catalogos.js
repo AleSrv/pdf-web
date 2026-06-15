@@ -279,12 +279,4 @@ export const catalogos = [
     pages: 2,
     category: 'audio',
   },
-  {
-    id: 'samsung-lista',
-    title: 'Listado completo',
-    subtitle: 'Samsung 2026',
-    fileId: '1mVihLly0j3ieO1ARsXM5yXOKtl234CG4',
-    pages: 2,
-    category: 'video',
-  },
 ]
