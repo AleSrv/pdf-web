@@ -1,39 +1,16 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import CatalogCard from './CatalogCard'
 import { catalogos } from '../data/catalogos'
-import { getThumbnailUrl } from '../lib/drive'
 
 const THRESHOLD = 60
 
 export default function CatalogGrid({ onOpenCatalog }) {
-  const [thumbnails, setThumbnails] = useState({})
   const [filter, setFilter] = useState('all')
   const [search, setSearch] = useState('')
   const [pullPhase, setPullPhase] = useState('idle')
   const [pullDistance, setPullDistance] = useState(0)
   const scrollRef = useRef(null)
   const pullRef = useRef({ startY: 0, phase: 'idle', distance: 0 })
-
-  useEffect(() => {
-    let mounted = true
-    const fetchAll = async () => {
-      const results = await Promise.allSettled(
-        catalogos.map(cat =>
-          getThumbnailUrl(cat.fileId).then(url => ({ id: cat.id, url }))
-        )
-      )
-      if (!mounted) return
-      const thumbs = {}
-      for (const r of results) {
-        if (r.status === 'fulfilled' && r.value.url) {
-          thumbs[r.value.id] = r.value.url
-        }
-      }
-      setThumbnails(thumbs)
-    }
-    fetchAll()
-    return () => { mounted = false }
-  }, [])
 
   const filteredCatalogs = useMemo(() => {
     const q = search.trim().toLowerCase()
@@ -47,77 +24,8 @@ export default function CatalogGrid({ onOpenCatalog }) {
     })
   }, [filter, search])
 
-  useEffect(() => {
-    const el = scrollRef.current
-    if (!el) return
-
-    const onStart = (e) => {
-      if (el.scrollTop === 0) {
-        pullRef.current.startY = e.touches[0].clientY
-        pullRef.current.phase = 'idle'
-      }
-    }
-
-    const onMove = (e) => {
-      if (el.scrollTop > 0) return
-      const dy = e.touches[0].clientY - pullRef.current.startY
-      if (dy <= 0) return
-      e.preventDefault()
-      const dist = Math.round(dy / 2.5)
-      pullRef.current.distance = dist
-      pullRef.current.phase = dist >= THRESHOLD ? 'ready' : 'pulling'
-      setPullDistance(dist)
-      setPullPhase(pullRef.current.phase)
-    }
-
-    const onEnd = () => {
-      if (pullRef.current.phase === 'ready') {
-        setPullPhase('refreshing')
-        setPullDistance(THRESHOLD)
-        window.location.reload()
-      } else {
-        pullRef.current.phase = 'idle'
-        setPullPhase('idle')
-        setPullDistance(0)
-      }
-    }
-
-    el.addEventListener('touchstart', onStart, { passive: true })
-    el.addEventListener('touchmove', onMove, { passive: false })
-    el.addEventListener('touchend', onEnd, { passive: true })
-
-    return () => {
-      el.removeEventListener('touchstart', onStart)
-      el.removeEventListener('touchmove', onMove)
-      el.removeEventListener('touchend', onEnd)
-    }
-  }, [])
-
   return (
     <div className="h-full flex flex-col overflow-y-auto relative" ref={scrollRef}>
-      {pullPhase !== 'idle' && (
-        <div
-          className="shrink-0 flex items-center justify-center gap-2 transition-none"
-          style={{ height: pullDistance, minHeight: 0 }}
-        >
-          {pullPhase === 'refreshing' ? (
-            <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-          ) : (
-            <span
-              className={`material-symbols-outlined text-primary transition-transform duration-200 ${
-                pullPhase === 'ready' ? 'rotate-180' : ''
-              }`}
-              style={{ fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24" }}
-            >
-              arrow_downward
-            </span>
-          )}
-          <span className="text-xs text-on-surface-variant font-medium">
-            {pullPhase === 'ready' ? 'Suelta para recargar' : 'Tira para recargar'}
-          </span>
-        </div>
-      )}
-
       <div className="px-8 lg:px-16 xl:px-24 py-4 lg:py-6">
         <header className="mb-5 py-3">
           <div className="flex flex-wrap items-center gap-3 my-6">
@@ -189,7 +97,6 @@ export default function CatalogGrid({ onOpenCatalog }) {
               <CatalogCard
                 key={cat.id}
                 catalog={cat}
-                thumbnail={thumbnails[cat.id]}
                 onOpen={onOpenCatalog}
               />
             ))}
