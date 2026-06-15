@@ -112,14 +112,6 @@ export const catalogos = [
     category: 'video',
   },
   {
-    id: 'm90h-2026',
-    title: 'TV M90H 2026',
-    subtitle: 'Ficha técnica',
-    fileId: '133HL9vrPd08gZiAKibj4qMU0Dc7ZRfwL',
-    pages: 2,
-    category: 'video',
-  },
-  {
     id: 'm80h-2026',
     title: 'TV M80H 2026',
     subtitle: 'Ficha técnica',
@@ -136,8 +128,8 @@ export const catalogos = [
     category: 'video',
   },
   {
-    id: 'q5f-2026',
-    title: 'TV Q5F 2026',
+    id: 'm90h-2026',
+    title: 'TV M90H 2026',
     subtitle: 'Ficha técnica',
     fileId: '1wILEsosjEcW7GM_zrAYRKvRCsgMotS4N',
     pages: 2,
