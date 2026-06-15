@@ -2,9 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import PageControls from './PageControls'
 import ThumbnailStrip from './ThumbnailStrip'
 
-export default function CatalogViewer({ catalog, onBack }) {
-  const { title, images, id } = catalog
-  const totalPages = images.length
+export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBlob, onBack }) {
   const [currentPage, setCurrentPage] = useState(1)
   const [fullscreen, setFullscreen] = useState(false)
   const [scale, setScale] = useState(1)
@@ -14,7 +12,7 @@ export default function CatalogViewer({ catalog, onBack }) {
   const shareRef = useRef(null)
   const g = useRef({
     pointers: new Map(),
-    mode: null,
+    mode: null, // 'pinch' | 'pan' | 'navigate' | null
     startScale: 1,
     startOffset: { x: 0, y: 0 },
     startDist: 0,
@@ -29,7 +27,8 @@ export default function CatalogViewer({ catalog, onBack }) {
   })
 
   const goTo = useCallback((page) => {
-    setCurrentPage(Math.max(1, Math.min(page, totalPages)))
+    const next = Math.max(1, Math.min(page, totalPages))
+    setCurrentPage(next)
   }, [totalPages])
 
   useEffect(() => {
@@ -151,6 +150,8 @@ export default function CatalogViewer({ catalog, onBack }) {
 
     if (g.current.mode === 'pan') {
       setOffset({ x: g.current.startOffset.x + dx, y: g.current.startOffset.y + dy })
+    } else if (g.current.mode === 'navigate') {
+      // existing drag feedback
     }
   }
 
@@ -195,7 +196,8 @@ export default function CatalogViewer({ catalog, onBack }) {
     const handler = (e) => {
       if (e.ctrlKey || e.metaKey) {
         e.preventDefault()
-        setScale((s) => Math.max(0.5, Math.min(3, s + -e.deltaY * 0.002)))
+        const delta = -e.deltaY * 0.002
+        setScale((s) => Math.max(0.5, Math.min(3, s + delta)))
       }
     }
     el.addEventListener('wheel', handler, { passive: false })
@@ -204,19 +206,45 @@ export default function CatalogViewer({ catalog, onBack }) {
 
   const handleZoomIn = () => setScale((s) => Math.min(s + 0.25, 3))
   const handleZoomOut = () => setScale((s) => Math.max(s - 0.25, 0.5))
-  const handleZoomReset = () => { setScale(1); setOffset({ x: 0, y: 0 }) }
+  const handleZoomReset = () => {
+    setScale(1)
+    setOffset({ x: 0, y: 0 })
+  }
   const handleDoubleClick = () => {
-    if (scale > 1.05) { setScale(1); setOffset({ x: 0, y: 0 }) }
-    else { setScale(2); setOffset({ x: 0, y: 0 }) }
+    if (scale > 1.05) {
+      setScale(1)
+      setOffset({ x: 0, y: 0 })
+    } else {
+      setScale(2)
+      setOffset({ x: 0, y: 0 })
+    }
   }
 
-  const pageSrc = images[currentPage - 1]
-  if (!pageSrc) return null
+  const page = pages[currentPage - 1]
+  if (!page) return null
 
+  const driveDownloadUrl = catalog?.fileId
+    ? `https://drive.google.com/uc?export=download&id=${catalog.fileId}`
+    : window.location.href
   const shareText = encodeURIComponent(`${title} — Ficha técnica Samsung`)
-  const shareUrl = encodeURIComponent(window.location.href)
+  const shareUrl = encodeURIComponent(driveDownloadUrl)
+
+  const downloadUrl = pdfBlob ? URL.createObjectURL(pdfBlob) : null
+
   const isZoomed = scale > 1.05
   const cursorStyle = isZoomed ? 'grab' : 'default'
+
+  const handleNativeShare = async () => {
+    if (!pdfBlob || !navigator.share) return false
+    const file = new File([pdfBlob], `${title || 'catalogo'}.pdf`, { type: 'application/pdf' })
+    if (navigator.canShare && !navigator.canShare({ files: [file] })) return false
+    try {
+      await navigator.share({ files: [file], title: title })
+      return true
+    } catch {
+      return false
+    }
+  }
 
   return (
     <div className="flex flex-col h-full">
@@ -260,9 +288,23 @@ export default function CatalogViewer({ catalog, onBack }) {
             </button>
           </div>
 
+          {downloadUrl && (
+            <a
+              href={downloadUrl}
+              download={`${title || 'catalogo'}.pdf`}
+              className="p-2 rounded-lg hover:bg-surface-high transition-colors text-on-surface-variant hover:text-on-surface"
+              title="Descargar PDF"
+            >
+              <span className="material-symbols-outlined">download</span>
+            </a>
+          )}
+
           <div className="relative" ref={shareRef}>
             <button
-              onClick={() => setShowShareMenu((v) => !v)}
+              onClick={async () => {
+                const shared = await handleNativeShare()
+                if (!shared) setShowShareMenu((v) => !v)
+              }}
               className="p-2 rounded-lg hover:bg-surface-high transition-colors text-on-surface-variant hover:text-on-surface"
               title="Compartir"
             >
@@ -320,7 +362,7 @@ export default function CatalogViewer({ catalog, onBack }) {
             }}
           >
             <img
-              src={pageSrc}
+              src={page.src}
               alt={`Página ${currentPage}`}
               className="max-h-[calc(100vh-20rem)] max-w-[85vw] object-contain rounded-lg shadow-2xl"
               draggable={false}
@@ -357,7 +399,7 @@ export default function CatalogViewer({ catalog, onBack }) {
 
       <div className="shrink-0">
         <PageControls currentPage={currentPage} totalPages={totalPages} goTo={goTo} />
-        <ThumbnailStrip images={images} currentPage={currentPage} goTo={goTo} />
+        <ThumbnailStrip pages={pages} currentPage={currentPage} goTo={goTo} />
       </div>
     </div>
   )

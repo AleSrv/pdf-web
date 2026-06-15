@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react'
 
-export default function ThumbnailStrip({ images, currentPage, goTo }) {
+export default function ThumbnailStrip({ pages, currentPage, goTo }) {
   const stripRef = useRef(null)
   const activeRef = useRef(null)
 
@@ -18,7 +18,7 @@ export default function ThumbnailStrip({ images, currentPage, goTo }) {
       ref={stripRef}
       className="flex gap-2 overflow-x-auto no-scrollbar px-4 py-3 bg-surface/60 backdrop-blur-sm border-t border-white/5"
     >
-      {images.map((src, i) => (
+      {pages.map((page, i) => (
         <button
           key={i}
           ref={i + 1 === currentPage ? activeRef : null}
@@ -33,7 +33,7 @@ export default function ThumbnailStrip({ images, currentPage, goTo }) {
           style={{ width: 60, height: 85 }}
         >
           <img
-            src={src}
+            src={page.thumbnail}
             alt={`Página ${i + 1}`}
             className="w-full h-full object-cover"
             draggable={false}
