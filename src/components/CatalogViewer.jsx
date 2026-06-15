@@ -346,7 +346,7 @@ export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBl
 
       <div
         ref={containerRef}
-        className="flex-1 flex items-center justify-center overflow-hidden relative select-none"
+        className="flex-1 flex items-center justify-center overflow-hidden relative select-none p-4 lg:p-8"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -364,7 +364,7 @@ export default function CatalogViewer({ pages, totalPages, title, catalog, pdfBl
             <img
               src={page.src}
               alt={`Página ${currentPage}`}
-              className="max-h-[calc(100vh-12rem)] max-w-[95vw] object-contain rounded-lg shadow-2xl"
+              className="max-h-[calc(100vh-20rem)] max-w-[85vw] object-contain rounded-lg shadow-2xl"
               draggable={false}
             />
           </div>
