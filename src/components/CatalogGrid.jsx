@@ -8,6 +8,7 @@ const THRESHOLD = 60
 export default function CatalogGrid({ onOpenCatalog }) {
   const [thumbnails, setThumbnails] = useState({})
   const [filter, setFilter] = useState('all')
+  const [search, setSearch] = useState('')
   const [pullPhase, setPullPhase] = useState('idle')
   const [pullDistance, setPullDistance] = useState(0)
   const scrollRef = useRef(null)
@@ -34,10 +35,17 @@ export default function CatalogGrid({ onOpenCatalog }) {
     return () => { mounted = false }
   }, [])
 
-  const filteredCatalogs = useMemo(
-    () => filter === 'all' ? catalogos : catalogos.filter(c => c.category === filter),
-    [filter]
-  )
+  const filteredCatalogs = useMemo(() => {
+    const q = search.trim().toLowerCase()
+    return catalogos.filter(c => {
+      if (filter !== 'all' && c.category !== filter) return false
+      if (q) {
+        const t = (c.title + ' ' + c.id).toLowerCase()
+        if (!t.includes(q)) return false
+      }
+      return true
+    })
+  }, [filter, search])
 
   useEffect(() => {
     const el = scrollRef.current
@@ -137,6 +145,19 @@ export default function CatalogGrid({ onOpenCatalog }) {
           <p className="text-on-surface-variant text-xs my-3">
             Selecciona un catálogo para visualizarlo
           </p>
+          <div className="relative max-w-xs">
+            <span
+              className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg pointer-events-none"
+              style={{ fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20" }}
+            >search</span>
+            <input
+              type="text"
+              placeholder="Buscar modelo..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="w-full bg-surface-low border border-surface-high rounded-full pl-10 pr-4 py-2.5 text-sm text-on-surface placeholder:text-outline outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-colors"
+            />
+          </div>
         </header>
 
         {catalogos.length === 0 ? (
