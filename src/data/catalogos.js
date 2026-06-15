@@ -120,8 +120,8 @@ export const catalogos = [
     category: 'video',
   },
   {
-    id: 'microled-2024',
-    title: 'TV MICRO LED 2024',
+    id: 'm80h-2026',
+    title: 'TV M80H 2026',
     subtitle: 'Ficha técnica',
     fileId: '17hulrOcC13jAbtpoAfQIfZRUnhPVwGKF',
     pages: 2,
