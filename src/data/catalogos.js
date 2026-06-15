@@ -312,8 +312,8 @@ export const catalogos = [
     category: 'video',
   },
   {
-    id: 'samsung-lista',
-    title: 'TV S83H 2026',
+    id: 'qn70h-2026',
+    title: 'TV QN70H 2026',
     subtitle: 'Listado completo',
     fileId: '1RkEQsBFZzPi27Otn-P-8QVb-NWHlGoA9',
     pages: 2,
