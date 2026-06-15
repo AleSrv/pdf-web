@@ -104,14 +104,6 @@ export const catalogos = [
     category: 'video',
   },
   {
-    id: 'm73h-2026',
-    title: 'TV M73H 2026',
-    subtitle: 'Ficha técnica',
-    fileId: '1YOdeFw1xDs2Q9Dhne2RVSRSmlasOCLWC',
-    pages: 2,
-    category: 'video',
-  },
-  {
     id: 'm80h-2026',
     title: 'TV M80H 2026',
     subtitle: 'Ficha técnica',
